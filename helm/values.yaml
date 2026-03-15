@@ -1,7 +1,5 @@
 argo-workflows:
   workflow:
-    # -- Deprecated; use controller.workflowNamespaces instead.
-    namespace: argo
     serviceAccount:
       # -- Specifies whether a service account should be created
       create: true
