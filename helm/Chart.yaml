@@ -1,0 +1,12 @@
+apiVersion: v2
+name: argo-workflows
+description: A Helm chart for Argo Workflows on Kubernetes
+
+type: application
+version: 0.1.0
+appVersion: "v4.0.2"
+
+dependencies:
+  - name: argo-workflows
+    version: 1.0.2 # version of the helm chart for argo-workflows used
+    repository: https://argoproj.github.io/argo-helm

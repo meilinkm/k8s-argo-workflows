@@ -1,0 +1,72 @@
+argo-workflows:
+  workflow:
+    # -- Deprecated; use controller.workflowNamespaces instead.
+    namespace: argo
+    serviceAccount:
+      # -- Specifies whether a service account should be created
+      create: true
+      # -- Labels applied to created service account
+      labels: {}
+      # -- Annotations applied to created service account
+      annotations: {}
+      # -- Service account which is used to run workflows
+      name: "argo-workflow"
+      # -- Secrets with credentials to pull images from a private registry. Same format as `.Values.images.pullSecrets`
+      pullSecrets: []
+    rbac:
+      # -- Adds Role and RoleBinding for the above specified service account to be able to run workflows.
+      # A Role and Rolebinding pair is also created for each namespace in controller.workflowNamespaces (see below)
+      create: true
+      # -- Allows permissions for the Argo Agent. Only required if using http/plugin templates
+      agentPermissions: false
+      # -- Allows permissions for the Argo Artifact GC pod. Only required if using artifact gc
+      artifactGC: true
+      # -- Extra service accounts to be added to the RoleBinding
+      serviceAccounts: []
+        # - name: my-service-account
+        #   namespace: my-namespace
+      # -- Additional rules for the service account that runs the workflows.
+      rules: []
+  
+  server:
+    # Set authmode to server
+    authModes:
+    - server
+  
+    # Ingress definition
+    ingress:
+      # -- Enable an ingress resource
+      enabled: true
+      # -- Additional ingress annotations
+      annotations: {}
+      # -- Additional ingress labels
+      labels: {}
+      # -- Defines which ingress controller will implement the resource
+      ingressClassName: "cilium"
+  
+      # -- List of ingress hosts
+      ## Hostnames must be provided if Ingress is enabled.
+      ## Secrets must be manually created in the namespace
+      hosts: 
+        - argoworkflows.meilink.net
+  
+      # -- List of ingress paths
+      paths:
+        - /
+      pathType: Prefix
+      tls: 
+         - secretName: argoworkflows-tls
+           hosts:
+             - argoworkflows.meilink.net 
+  
+  ## Custom resource configuration
+  crds:
+    # -- Install and upgrade CRDs
+    install: true
+    # -- Keep CRDs on chart uninstall
+    keep: false
+    # -- Use full CRDs with complete OpenAPI schemas. When false, uses minified CRDs with x-kubernetes-preserve-unknown-fields.
+    # Note: Full CRDs are ~7.4MB and may require Server Side Apply (kubectl apply --server-side). See README for details.
+    full: false
+    # -- Annotations to be added to all CRDs
+    annotations: {}
