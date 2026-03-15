@@ -53,7 +53,7 @@ argo-workflows:
         - /
       pathType: Prefix
       tls: 
-         - secretName: argoworkflows-tls
+         - secretName: meilinknet
            hosts:
              - argoworkflows.meilink.net 
   
